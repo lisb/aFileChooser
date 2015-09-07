@@ -26,4 +26,6 @@
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
     </style>
 
+    <style name="AChooserTheme" parent="Theme.AppCompat.Light.DarkActionBar" />
+
 </resources>

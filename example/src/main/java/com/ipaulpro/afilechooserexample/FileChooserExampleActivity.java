@@ -16,11 +16,11 @@
 
 package com.ipaulpro.afilechooserexample;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,9 +32,9 @@ import com.ipaulpro.afilechooser.utils.FileUtils;
 /**
  * @author paulburke (ipaulpro)
  */
-public class FileChooserExampleActivity extends Activity {
+public class FileChooserExampleActivity extends AppCompatActivity {
 
-    private static final String TAG = "FileChooserExampleActivity";
+    private static final String TAG = "FileChooserExampleActivity".substring(0, 23);
 
     private static final int REQUEST_CODE = 6384; // onActivityResult request
                                                   // code
@@ -86,7 +86,7 @@ public class FileChooserExampleActivity extends Activity {
                             Toast.makeText(FileChooserExampleActivity.this,
                                     "File Selected: " + path, Toast.LENGTH_LONG).show();
                         } catch (Exception e) {
-                            Log.e("FileSelectorTestActivity", "File select error", e);
+                            Log.e(TAG, "File select error", e);
                         }
                     }
                 }
