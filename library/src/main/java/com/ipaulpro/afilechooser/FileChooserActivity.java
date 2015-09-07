@@ -16,21 +16,19 @@
 
 package com.ipaulpro.afilechooser;
 
-import android.app.ActionBar;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentManager.BackStackEntry;
 import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Menu;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -42,14 +40,12 @@ import java.io.File;
  * @version 2013-06-25
  * @author paulburke (ipaulpro)
  */
-public class FileChooserActivity extends FragmentActivity implements
+public class FileChooserActivity extends AppCompatActivity implements
         OnBackStackChangedListener, FileListFragment.Callbacks {
 
     public static final String PATH = "path";
     public static final String EXTERNAL_BASE_PATH = Environment
             .getExternalStorageDirectory().getAbsolutePath();
-
-    private static final boolean HAS_ACTIONBAR = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
 
     private FragmentManager mFragmentManager;
     private BroadcastReceiver mStorageListener = new BroadcastReceiver() {
@@ -77,6 +73,12 @@ public class FileChooserActivity extends FragmentActivity implements
         }
 
         setTitle(mPath);
+
+        final ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+
+        updateActionBar();
     }
 
     @Override
@@ -102,9 +104,8 @@ public class FileChooserActivity extends FragmentActivity implements
 
     @Override
     public void onBackStackChanged() {
-
         int count = mFragmentManager.getBackStackEntryCount();
-        if (count > 0) {
+        if (hasBackStack()) {
             BackStackEntry fragment = mFragmentManager.getBackStackEntryAt(count - 1);
             mPath = fragment.getName();
         } else {
@@ -112,28 +113,31 @@ public class FileChooserActivity extends FragmentActivity implements
         }
 
         setTitle(mPath);
-        if (HAS_ACTIONBAR)
-            invalidateOptionsMenu();
+        updateActionBar();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (HAS_ACTIONBAR) {
-            boolean hasBackStack = mFragmentManager.getBackStackEntryCount() > 0;
-
-            ActionBar actionBar = getActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(hasBackStack);
-            actionBar.setHomeButtonEnabled(hasBackStack);
+    private  void updateActionBar() {
+        final ActionBar actionBar = getSupportActionBar();
+        if (hasBackStack()) {
+            actionBar.setHomeAsUpIndicator(R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        } else {
+            actionBar.setHomeAsUpIndicator(R.drawable.abc_ic_clear_mtrl_alpha);
         }
+    }
 
-        return true;
+    private boolean hasBackStack() {
+        return mFragmentManager.getBackStackEntryCount() > 0;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                mFragmentManager.popBackStack();
+                if (hasBackStack()) {
+                    mFragmentManager.popBackStack();
+                } else {
+                    finish();
+                }
                 return true;
         }
 
