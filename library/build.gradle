@@ -3,7 +3,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'com.ipaulpro.afilechooser'
 archivesBaseName = 'afilechooser'
-version = '1.0.1-SNAPSHOT'
+version = '1.0.1'
 
 android {
     compileSdkVersion 22
